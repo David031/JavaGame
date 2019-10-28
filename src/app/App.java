@@ -11,11 +11,11 @@ public class App {
   static Player player = new Player();
   static int mapLevel;
   static Scanner scanner = new Scanner(System.in);
-  static String curreMap[][];
+  static String currentMap[][];
   
   static void init() {
-    px = 1;
-    py = 1;
+    px = 2;
+    py = 0;
     mapLevel = 1;
     for (int i = 0; i < boss.length; i++) {
       boss[i] = new Enemy(EnemyType.Boss, i + 1);
@@ -25,9 +25,9 @@ public class App {
         minion[i][j] = new Enemy(EnemyType.Minion, i + 1);
       }
     }
-    curreMap = gameMap.map1;
-    initMap(curreMap);
-    printBanner();
+    currentMap = gameMap.map1;
+    initMap(currentMap);
+    // printBanner();
   }
 
   static void initMap(String map [][]) {
@@ -40,7 +40,7 @@ public class App {
   static void gameControPanel() {
     cScreenDelay();
     System.out.println("Game Control Panel");
-    printMap(curreMap);
+    printMap(currentMap);
   }
 
   static void vsControlPanel() {
@@ -167,6 +167,6 @@ public class App {
 
   public static void main(String[] args) throws Exception {
     init();
-    mainControlPanel();
+    printMap(currentMap);
   }
 }

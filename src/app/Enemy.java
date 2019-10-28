@@ -1,5 +1,7 @@
 package app;
 
+import java.util.Random;
+
 public class Enemy {
   int hp;
   int ad;
@@ -12,6 +14,7 @@ public class Enemy {
   int y;
   EnemyType enemyType;
   int level;
+  Random random = new Random();
 
   Enemy(EnemyType type, int level) {
     this.enemyType = type;
@@ -29,27 +32,27 @@ public class Enemy {
   }
 
   void initBossAttributes() {
-    hp = 280 * level * (int) Math.round(Math.random() * 7);
-    ad = 200 * level * (int) Math.round(Math.random() * 2);
-    ap = 180 * level * (int) Math.round(Math.random() * 2);
-    ar = 130 * level * (int) Math.round(Math.random() * 2);
-    mr = 120 * level * (int) Math.round(Math.random() * 2);
-    cr = 2 * level * (int) Math.round(Math.random() * 2);
+    hp = 280 * level * random.nextInt(7) + 1;
+    ad = 200 * level * random.nextInt(2) + 1;
+    ap = 180 * level * random.nextInt(2) + 1;
+    ar = 130 * level * random.nextInt(2) + 1;
+    mr = 120 * level * random.nextInt(2) + 1;
+    cr = 2 * level * random.nextInt(2) + 1;
     dr = 80;
-    x = (int) Math.round(Math.random() * 14);
-    y = (int) Math.round(Math.random() * 14);
+    x = random.nextInt(13) + 1;
+    y = random.nextInt(13) + 1;
   }
 
   void initMinionAttributes() {
-    hp = 120 * level * (int) Math.round(Math.random() * 4);
-    ad = 100 * level * (int) Math.round(Math.random() * 3);
-    ap = 100 * level * (int) Math.round(Math.random() * 3);
-    ar = 100 * level * (int) Math.round(Math.random() * 3);
-    mr = 100 * level * (int) Math.round(Math.random() * 3);
+    hp = 120 * level * random.nextInt(4) + 1;
+    ad = 100 * level * random.nextInt(3) + 1;
+    ap = 100 * level * random.nextInt(3) + 1;
+    ar = 100 * level * random.nextInt(3) + 1;
+    mr = 100 * level * random.nextInt(3) + 1;
     cr = 4 * level;
     dr = 20;
-    x = (int) Math.round(Math.random() * 14);
-    y = (int) Math.round(Math.random() * 14);
+    x = random.nextInt(13) + 1;
+    y = random.nextInt(13) + 1;
   }
 
   boolean isCC() {

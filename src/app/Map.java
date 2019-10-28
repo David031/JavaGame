@@ -22,8 +22,11 @@ public class Map {
                 } else {
                     temp[i][j] = "  ";
                 }
+
             }
         }
+        temp[1][0] = "⇀ ";
+        temp[3][0] = "⇁ ";
         return temp;
     }
 }
