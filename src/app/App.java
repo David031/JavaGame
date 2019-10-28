@@ -3,102 +3,101 @@ package app;
 import java.util.Scanner;
 
 public class App {
-  static String map1[][] = new String[15][15];
+  static Map gameMap = new Map();  
   static int px;
   static int py;
   static Enemy boss[] = new Enemy[15];
   static Enemy minion[][] = new Enemy[15][5];
   static Player player = new Player();
   static int mapLevel;
-
+  static Scanner scanner = new Scanner(System.in);
+  static String curreMap[][];
+  
   static void init() {
     px = 1;
     py = 1;
+    mapLevel = 1;
     for (int i = 0; i < boss.length; i++) {
       boss[i] = new Enemy(EnemyType.Boss, i + 1);
     }
     for (int i = 0; i < minion.length; i++) {
-      for (int j = 0; j < minion[i].length; j++) {
+      for (int j = 0; j < 5; j++) {
         minion[i][j] = new Enemy(EnemyType.Minion, i + 1);
       }
     }
-    initMap1();
+    curreMap = gameMap.map1;
+    initMap(curreMap);
     printBanner();
   }
 
-  static void initMap1() {
-    for (int i = 0; i < map1.length; i++) {
-      for (int j = 0; j < map1.length; j++) {
-        if (i == 0 || i == (map1.length - 1)) {
-          map1[i][j] = "# ";
-        } else if (j == 0 || j == (map1.length - 1)) {
-          map1[i][j] = "# ";
-        } else {
-          map1[i][j] = "  ";
-        }
-      }
+  static void initMap(String map [][]) {
+    for (int i = 0; i < 5; i++) {
+      map[minion[0][i].x][minion[0][i].y] = "E ";
     }
-
+    map[px][py] = "P ";
   }
 
-  static void playerMove(int x, int y) {
-    int oldx = px;
-    int oldy = py;
-    px = x;
-    py = y;
-    map1[oldx][oldy] = "  ";
-    map1[px][py] = "P ";
+  static void gameControPanel() {
     cScreenDelay();
-    printMap(map1);
-  }
-
-  static void clearScreen() {
-    System.out.print("\033[H\033[2J");
-    System.out.flush();
-  }
-
-  static void mainControlPanel() {
-
+    System.out.println("Game Control Panel");
+    printMap(curreMap);
   }
 
   static void vsControlPanel() {
-
+    cScreenDelay();
+    System.out.println("Frighting Control Panel");
   }
 
   static void inventoryControlPanel() {
-
-  }
-
-  static int userOption() {
-    Scanner scanner = new Scanner(System.in);
-    int option;
-    System.out.print("Please input your option : ");
-    option = scanner.nextInt();
-    scanner.close();
-    return option;
-  }
-
-  static void printMap(String[][] map) {
-    for (int i = 0; i < map.length; i++) {
-      for (int j = 0; j < map.length; j++) {
-        System.out.print(map[i][j]);
-      }
-      System.out.println();
-    }
+    cScreenDelay();
+    System.out.println("Inventory Control Panel");
   }
 
   static void vsPart(Enemy enemy) {
 
   }
 
-  static void cScreenDelay() {
+  static void mainControlPanel() {
+    cScreenDelay();
+    System.out.println("Wellcome to DeepDark ");
+    System.out.println("1. Start");
+    System.out.println("2. Inventory");
+    int option = 0;
+    System.out.println(minion);
+    while (option != 1 && option != 2) {
+      option = userOption();
+    }
 
+    if (option == 1) {
+      gameControPanel();
+    } else {
+      inventoryControlPanel();
+    }
+  }
+
+  static void playerMove(int x, int y, String map[][]) {
+    int oldx = px;
+    int oldy = py;
+    px = x;
+    py = y;
+    map[oldx][oldy] = "  ";
+    map[px][py] = "P ";
+    cScreenDelay();
+    printMap(map);
+  }
+
+  static void cScreenDelay() {
     try {
       Thread.sleep(1000);
       clearScreen();
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
+  }
+
+  static void clearScreen() {
+    System.out.print("\033[H\033[2J");
+    System.out.flush();
   }
 
   static void printBanner() {
@@ -119,10 +118,11 @@ public class App {
     System.out.println("    _/    _/  _/_/_/    _/_/_/    _/_/_/        _/    _/  _/_/_/_/  _/_/_/    _/_/        ");
     System.out.println("   _/    _/  _/        _/        _/            _/    _/  _/    _/  _/    _/  _/  _/       ");
     System.out.println(" _/_/_/    _/_/_/_/  _/_/_/_/  _/            _/_/_/    _/    _/  _/    _/  _/    _/       ");
-    cScreenDelay();
+
   }
 
   static void printStageClear() {
+    cScreenDelay();
     System.out.println(
         "       _/_/_/  _/_/_/_/_/    _/_/      _/_/_/  _/_/_/_/        _/_/_/  _/        _/_/_/_/    _/_/    _/_/_/        _/  _/  ");
     System.out.println(
@@ -133,10 +133,11 @@ public class App {
         "        _/      _/      _/    _/  _/    _/  _/            _/        _/        _/        _/    _/  _/    _/                 ");
     System.out.println(
         " _/_/_/        _/      _/    _/    _/_/_/  _/_/_/_/        _/_/_/  _/_/_/_/  _/_/_/_/  _/    _/  _/    _/      _/  _/      ");
-    cScreenDelay();
+
   }
 
   static void printStart() {
+    cScreenDelay();
     System.out.println("    _/_/_/    _/_/_/_/    _/_/    _/_/_/    _/      _/       ");
     System.out.println("   _/    _/  _/        _/    _/  _/    _/    _/  _/          ");
     System.out.println("  _/_/_/    _/_/_/    _/_/_/_/  _/    _/      _/             ");
@@ -150,7 +151,22 @@ public class App {
     System.out.println("   _/_/_/    _/_/        _/      _/           ");
   }
 
+  static int userOption() {
+    System.out.print("Please input your option : ");
+    return scanner.nextInt();
+  }
+
+  static void printMap(String[][] map) {
+    for (int i = 0; i < map.length; i++) {
+      for (int j = 0; j < map.length; j++) {
+        System.out.print(map[i][j]);
+      }
+      System.out.println();
+    }
+  }
+
   public static void main(String[] args) throws Exception {
     init();
+    mainControlPanel();
   }
 }
