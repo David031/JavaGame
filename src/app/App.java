@@ -3,7 +3,7 @@ package app;
 import java.util.Scanner;
 
 public class App {
-  static Map gameMap = new Map();  
+  static Map gameMap = new Map();
   static int px;
   static int py;
   static Enemy boss[] = new Enemy[15];
@@ -12,7 +12,7 @@ public class App {
   static int mapLevel;
   static Scanner scanner = new Scanner(System.in);
   static String currentMap[][];
-  
+
   static void init() {
     px = 2;
     py = 0;
@@ -30,7 +30,7 @@ public class App {
     // printBanner();
   }
 
-  static void initMap(String map [][]) {
+  static void initMap(String map[][]) {
     for (int i = 0; i < 5; i++) {
       map[minion[0][i].x][minion[0][i].y] = "E ";
     }
@@ -38,9 +38,44 @@ public class App {
   }
 
   static void gameControPanel() {
-    cScreenDelay();
-    System.out.println("Game Control Panel");
-    printMap(currentMap);
+
+    int option = 0;
+    while (option != 1 && option != 2 && option != 3 && option != 4 && option != -1) {
+      while (option != -1) {
+        cScreenDelay();
+        System.out.println("Game Control Panel");
+        System.out.println("--Game Map--");
+        printMap(currentMap);
+        System.out.println();
+        System.out.println("Current Map Level " + mapLevel);
+        System.out.println("Player Status : ");
+        System.out.println(" HP " + player.hp);
+        System.out.println(" MP " + player.mp);
+        System.out.println();
+        System.out.println("Control Option : ");
+        System.out.println("1. Move Up");
+        System.out.println("2. Move Down");
+        System.out.println("3. Move Left");
+        System.out.println("4. Move Right");
+        System.out.println("5. Inventory");
+        System.out.println("-1. Exit Game");
+        option = userOption();
+
+        if (option == 1) {
+          playerMove(px - 1, py, currentMap);
+        } else if (option == 2) {
+          playerMove(px + 1, py, currentMap);
+        } else if (option == 3) {
+          playerMove(px, py - 1, currentMap);
+        } else if (option == 4) {
+          playerMove(px, py + 1, currentMap);
+        } else if (option == 5) {
+          inventoryControlPanel();
+          //TODO:Inventory
+        }
+      }
+
+    }
   }
 
   static void vsControlPanel() {
@@ -58,30 +93,41 @@ public class App {
   }
 
   static void mainControlPanel() {
-    cScreenDelay();
-    System.out.println("Wellcome to DeepDark ");
-    System.out.println("1. Start");
-    System.out.println("2. Inventory");
     int option = 0;
-    System.out.println(minion);
     while (option != 1 && option != 2) {
+      cScreenDelay();
+      System.out.println("Wellcome to DeepDark ");
+      System.out.println("Control Option : ");
+      System.out.println("1. Start");
+      System.out.println("2. Exit");
       option = userOption();
     }
-
     if (option == 1) {
       gameControPanel();
-    } else {
-      inventoryControlPanel();
     }
   }
 
   static void playerMove(int x, int y, String map[][]) {
     int oldx = px;
     int oldy = py;
-    px = x;
-    py = y;
-    map[oldx][oldy] = "  ";
-    map[px][py] = "P ";
+    if (x >= 0 && y >= 0) {
+      if (map[x][y] == "  ") {
+        px = x;
+        py = y;
+        map[oldx][oldy] = "  ";
+        map[px][py] = "P ";
+      } else if (map[x][y] == "E ") {
+        System.out.println(" You see Enemy !!");
+        //TODO: Fighting
+      } else if (map[x][y] == "B ") {
+        System.out.println(" You see Boss !!");
+         //TODO: Fighting
+      } else {
+        System.out.println("Don't hit the wall !!");
+      }
+    } else {
+      System.out.println("Don't hit the wall !!");
+    }
     cScreenDelay();
     printMap(map);
   }
@@ -167,6 +213,6 @@ public class App {
 
   public static void main(String[] args) throws Exception {
     init();
-    printMap(currentMap);
+    mainControlPanel();
   }
 }

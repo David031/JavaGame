@@ -21,8 +21,6 @@ public class Player {
     mr = 100;
     cr = 0;
     level = 1;
-    x = (int) Math.round(Math.random() * 15);
-    y = (int) Math.round(Math.random() * 15);
   }
 
 }
