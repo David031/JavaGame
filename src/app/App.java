@@ -217,6 +217,7 @@ public class App {
       option = userOption();
     }
     if (option == 1) {
+      printStart();
       gameControPanel();
     }
   }
@@ -308,12 +309,14 @@ public class App {
     System.out.println("    _/  _/  _/    _/        _/        _/        _/        _/    _/  _/      _/  _/        ");
     System.out.println("     _/  _/      _/_/_/_/  _/_/_/_/  _/_/_/_/    _/_/_/    _/_/    _/      _/  _/_/_/_/   ");
     // cScreenDelay(1000);
+    System.out.println();
     System.out.println("                                  _/_/_/_/_/    _/_/                                      ");
     System.out.println("                                     _/      _/    _/                                     ");
     System.out.println("                                    _/      _/    _/                                      ");
     System.out.println("                                   _/      _/    _/                                       ");
     System.out.println("                                  _/        _/_/                                          ");
     // cScreenDelay(1000);
+    System.out.println();
     System.out.println("     _/_/_/    _/_/_/_/  _/_/_/_/  _/_/_/        _/_/_/      _/_/    _/_/_/    _/    _/   ");
     System.out.println("     _/    _/  _/        _/        _/    _/      _/    _/  _/    _/  _/    _/  _/  _/     ");
     System.out.println("    _/    _/  _/_/_/    _/_/_/    _/_/_/        _/    _/  _/_/_/_/  _/_/_/    _/_/        ");
@@ -324,6 +327,7 @@ public class App {
 
   static void printStageClear() {
     // cScreenDelay(1000);
+    System.out.println();
     System.out.println(
         "       _/_/_/  _/_/_/_/_/    _/_/      _/_/_/  _/_/_/_/        _/_/_/  _/        _/_/_/_/    _/_/    _/_/_/        _/  _/  ");
     System.out.println(
@@ -334,22 +338,25 @@ public class App {
         "        _/      _/      _/    _/  _/    _/  _/            _/        _/        _/        _/    _/  _/    _/                 ");
     System.out.println(
         " _/_/_/        _/      _/    _/    _/_/_/  _/_/_/_/        _/_/_/  _/_/_/_/  _/_/_/_/  _/    _/  _/    _/      _/  _/      ");
-
+    System.out.println();
   }
 
   static void printStart() {
     // cScreenDelay(1000);
+    System.out.println();
     System.out.println("    _/_/_/    _/_/_/_/    _/_/    _/_/_/    _/      _/       ");
     System.out.println("   _/    _/  _/        _/    _/  _/    _/    _/  _/          ");
     System.out.println("  _/_/_/    _/_/_/    _/_/_/_/  _/    _/      _/             ");
     System.out.println(" _/    _/  _/        _/    _/  _/    _/      _/              ");
     System.out.println("_/    _/  _/_/_/_/  _/    _/  _/_/_/        _/               ");
     // cScreenDelay(1000);
+    System.out.println();
     System.out.println("       _/_/_/    _/_/        _/      _/       ");
     System.out.println("    _/        _/    _/      _/      _/        ");
     System.out.println("   _/  _/_/  _/    _/      _/      _/         ");
     System.out.println("  _/    _/  _/    _/                          ");
     System.out.println("   _/_/_/    _/_/        _/      _/           ");
+    System.out.println();
   }
 
   static int userOption() {
