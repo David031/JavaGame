@@ -24,7 +24,7 @@ public class Player {
 
   Player() {
     this.hp = 120;
-    this.mp = 100;
+    this.mp = 200;
     this.ad = 100;
     this.ap = 100;
     this.ar = 100;
@@ -42,9 +42,9 @@ public class Player {
 
   void levelCheck(int xpAdd) {
     xp += xpAdd;
-    if (xp >= (level * 5)) {
+    if (xp >= (level * 1.5)) {
       level += 1;
-      xp -= (level * 5);
+      xp -= (level * 1.5);
       levelUp();
     }
 
@@ -69,34 +69,66 @@ public class Player {
   }
 
   int xQ() {
-    qCd += 3;
-    cdReduce(XType.Q);
-    if (qCd > 0) {
+
+    if (qCd > 0 || mp <= 0) {
       return 0;
     } else {
-      return 100;
+      cdReduce(XType.Q);
+      qCd += 3;
+      mp -= 10;
+      return ad + (random.nextInt(100) + 1);
     }
+
   }
 
   int xW() {
-    qCd += 4;
-    cdReduce(XType.W);
-    return 120;
+
+    if (wCd > 0 || mp <= 0) {
+      return 0;
+    } else {
+      cdReduce(XType.W);
+      wCd += 4;
+      mp -= 20;
+      return ap + (random.nextInt(100) + 1);
+    }
   }
 
   int xE() {
-    qCd += 5;
-    cdReduce(XType.E);
-    return 130;
+
+    if (eCd > 0 || mp <= 0) {
+      return 0;
+    } else {
+      cdReduce(XType.E);
+      eCd += 5;
+      mp -= 40;
+      return ad + (random.nextInt(100) + 1);
+      
+    }
   }
 
   int xR() {
-    qCd += 8;
-    cdReduce(XType.R);
-    return 200;
+
+    if (rCd > 0 || mp <= 0) {
+      return 0;
+    } else {
+      cdReduce(XType.R);
+      rCd += 8;
+      mp -= 60;
+      return ap * 2 + (random.nextInt(100) + 1);
+    }
+  }
+
+  int xA() {
+    mp += 10;
+    if (isCC()) {
+      return ad * 2;
+    } else {
+      return ad;
+    }
   }
 
   void cdReduce(XType type) {
+    mp += 10;
     switch (type) {
     case Q:
       wCd -= 1;
@@ -142,13 +174,6 @@ public class Player {
     }
   }
 
-  int xA() {
-    if (isCC()) {
-      return ad * 2;
-    } else {
-      return ad;
-    }
-  }
 }
 
 enum XType {

@@ -33,8 +33,8 @@ public class Enemy {
 
   void initBossAttributes() {
     this.hp = 280 * mapLevel * (random.nextInt(7) + 1);
-    this.ad = 200 * mapLevel * (random.nextInt(2) + 1);
-    this.ap = 180 * mapLevel * (random.nextInt(2) + 1);
+    this.ad = 200 * mapLevel;
+    this.ap = 180 * mapLevel;
     this.ar = 130 * mapLevel * (random.nextInt(2) + 1);
     this.mr = 120 * mapLevel * (random.nextInt(2) + 1);
     this.cr = 2 * mapLevel * (random.nextInt(2) + 1);
@@ -44,12 +44,12 @@ public class Enemy {
   }
 
   void initMinionAttributes() {
-    this.hp = 120 * mapLevel * (random.nextInt(4) + 1);
-    this.ad = 100 * mapLevel * (random.nextInt(3) + 1);
-    this.ap = 100 * mapLevel * (random.nextInt(3) + 1);
-    this.ar = 100 * mapLevel * (random.nextInt(3) + 1);
-    this.mr = 100 * mapLevel * (random.nextInt(3) + 1);
-    this.cr = 4 * mapLevel;
+    this.hp = 120 * mapLevel;
+    this.ad = 100 * mapLevel;
+    this.ap = 100 * mapLevel;
+    this.ar = 100 * mapLevel;
+    this.mr = 100 * mapLevel;
+    this.cr = 4 + mapLevel;
     this.dr = 20;
     this.x = (random.nextInt(13) + 1);
     this.y = (random.nextInt(13) + 1);
@@ -57,7 +57,7 @@ public class Enemy {
 
   boolean isCC() {
     int crc = (random.nextInt(100) + 1);
-    if (crc<=cr) {
+    if (crc <= cr) {
       return true;
     } else {
       return false;
@@ -81,7 +81,7 @@ public class Enemy {
   }
 
   boolean isDrop() {
-    //TODO:Drop Item
+    // TODO:Drop Item
     return false;
   }
 }

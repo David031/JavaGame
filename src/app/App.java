@@ -37,8 +37,8 @@ public class App {
 
     int option = 0;
     while (option != 1 && option != 2 && option != 3 && option != 4 && option != -1) {
-      while (option != -1) {
-        cScreenDelay(100);
+      while (option != -1 && player.hp > 0) {
+        // cScreenDelay(100);
         System.out.println("Game Control Panel");
         System.out.println("--Game Map--");
         printMap(currentMap);
@@ -77,16 +77,16 @@ public class App {
   }
 
   static void inventoryControlPanel() {
-    cScreenDelay(100);
+    // cScreenDelay(100);
     System.out.println("Inventory Control Panel");
     // TODO:Inventory
   }
 
   static void vsControlPanel(Enemy enemy) {
     int option = 0;
-    while (option != 1 && option != 2 && option != 3 && option != 4 && option != -1) {
-      while (option != -1 && enemy.hp > 0) {
-        cScreenDelay(100);
+    while (option != 1 && option != 2 && option != 3 && option != 4 && option != 5 && option != 6 && option != -1) {
+      while (option != -1 && enemy.hp > 0 && player.hp > 0) {
+        // cScreenDelay(1000);
         System.out.println("VS Control Panel");
         System.out.println("Current Map Level " + mapLevel);
         System.out.println();
@@ -123,83 +123,88 @@ public class App {
         } else if (option == 6) {
 
         }
+
       }
     }
     if (enemy.hp <= 0) {
       // TODO: After Enemy dead
+      currentMap[enemy.x][enemy.y] = "  ";
       player.levelCheck(100);
+    }
+    if (player.hp <= 0) {
+      System.out.println("Game Over!!");
+    }
+  }
+
+  static void checkEnemy() {
+    int count = 0;
+    for (int i = 0; i < 5; i++) {
+      if (minion[mapLevel - 1][i].hp <= 0) {
+        count = +1;
+      }
+    }
+    if (boss[mapLevel - 1].hp <= 0) {
+      count += 1;
+    }
+    if (count == 5) {
+      currentMap[boss[mapLevel - 1].x][boss[mapLevel - 1].y] = "B ";
+    } else if (count == 6) {
+      mapLevel += 1;
+      currentMap = gameMap.getMap(mapLevel);
+      initMap(currentMap);
     }
   }
 
   static int damageCalc(int damge, int def) {
-    return (damge - def);
+    int calcdam = (damge - def);
+    if (calcdam <= 0) {
+      return 0;
+    } else {
+      return calcdam;
+    }
   }
 
   static void fight(Enemy enemy, XType type) {
     // TODO:Fight
-    int pxQ = player.xQ();
-    int pxW = player.xW();
-    int pxE = player.xE();
-    int pxR = player.xR();
-    int pxA = player.xA();
     switch (type) {
     case Q:
-      // AD
-      if (pxQ == 0) {
-        System.out.println("Cooling Down ..");
-      } else {
-        enemy.hp -= damageCalc(pxQ, enemy.ar);
-        System.out.println("Produce " + damageCalc(pxQ, enemy.ar) + "Damage");
-      }
+      applyDamage(enemy, player.xQ());
       break;
     case W:
-      // AP
-      if (pxW == 0) {
-        System.out.println("Cooling Down ..");
-      } else {
-        enemy.hp -= damageCalc(pxW, enemy.mr);
-        System.out.println("Produce " + damageCalc(pxW, enemy.mr) + "Damage");
-      }
+      applyDamage(enemy, player.xW());
       break;
     case E:
-      // AD
-      if (pxE == 0) {
-        System.out.println("Cooling Down ..");
-      } else {
-        enemy.hp -= damageCalc(pxE, enemy.ar);
-        System.out.println("Produce " + damageCalc(pxE, enemy.ar) + "Damage");
-      }
+      applyDamage(enemy, player.xE());
       break;
     case R:
       // AP
-      if (pxR == 0) {
-        System.out.println("Cooling Down ..");
-      } else {
-        enemy.hp -= damageCalc(pxR, enemy.mr);
-        System.out.println("Produce " + damageCalc(pxR, enemy.mr) + "Damage");
-      }
+      applyDamage(enemy, player.xR());
       break;
     case A:
       // AD
+      int pxA = player.xA();
+      int eAd = enemy.adA();
+      int eAp = enemy.apA();
+      int enemyA = eAd + eAp;
       enemy.hp -= damageCalc(pxA, enemy.ar);
-      System.out.println("Produce " + damageCalc(pxA, enemy.ar) + "Damage");
+      System.out.println("Produce " + damageCalc(pxA, enemy.ar) + " Damage");
+
+      if (enemyA > (enemy.ad + enemy.ap)) {
+        System.out.println("Enemy Critical hit !! ");
+      }
+      // TODO:Enemy Damage
+      player.hp -= damageCalc(eAd, player.ar) + damageCalc(eAp, player.mr);
+      System.out.println("HP left " + player.hp);
       break;
     default:
       break;
     }
-    int eAd = enemy.adA();
-    int eAp = enemy.apA();
-    int enemyA = eAd + eAp;
-    if (enemyA > (enemy.ad + enemy.ap)) {
-      System.out.println("Enemy Critical hit !! ");
-    }
-    //TODO:Enemy Damage
   }
 
   static void mainControlPanel() {
     int option = 0;
     while (option != 1 && option != 2) {
-      cScreenDelay(100);
+      // cScreenDelay(100);
       System.out.println("Wellcome to DeepDark ");
       System.out.println("Control Option : ");
       System.out.println("1. Start");
@@ -208,6 +213,27 @@ public class App {
     }
     if (option == 1) {
       gameControPanel();
+    }
+  }
+
+  static void applyDamage(Enemy enemy, int px) {
+    if (px == 0) {
+      if (player.mp <= 0) {
+        System.out.println("No more mp...");
+      } else {
+        System.out.println("Cooling Down ..");
+      }
+
+    } else {
+      int eAd = enemy.adA();
+      int eAp = enemy.apA();
+      int enemyA = eAd + eAp;
+      enemy.hp -= damageCalc(px, enemy.mr);
+      System.out.println("Produce " + damageCalc(px, enemy.mr) + " Damage");
+      if (enemyA > (enemy.ad + enemy.ap)) {
+        System.out.println("Enemy Critical hit !! ");
+      }
+      player.hp -= damageCalc(eAd, player.ar) + damageCalc(eAp, player.mr);
     }
   }
 
@@ -247,7 +273,7 @@ public class App {
     } else {
       System.out.println("Don't hit the wall !!");
     }
-    cScreenDelay(1000);
+    // cScreenDelay(1000);
     printMap(map);
   }
 
@@ -271,13 +297,13 @@ public class App {
     System.out.println("   _/    _/    _/  _/_/_/    _/        _/        _/        _/    _/  _/  _/  _/  _/_/_/   ");
     System.out.println("    _/  _/  _/    _/        _/        _/        _/        _/    _/  _/      _/  _/        ");
     System.out.println("     _/  _/      _/_/_/_/  _/_/_/_/  _/_/_/_/    _/_/_/    _/_/    _/      _/  _/_/_/_/   ");
-    cScreenDelay(1000);
+    // cScreenDelay(1000);
     System.out.println("                                  _/_/_/_/_/    _/_/                                      ");
     System.out.println("                                     _/      _/    _/                                     ");
     System.out.println("                                    _/      _/    _/                                      ");
     System.out.println("                                   _/      _/    _/                                       ");
     System.out.println("                                  _/        _/_/                                          ");
-    cScreenDelay(1000);
+    // cScreenDelay(1000);
     System.out.println("     _/_/_/    _/_/_/_/  _/_/_/_/  _/_/_/        _/_/_/      _/_/    _/_/_/    _/    _/   ");
     System.out.println("     _/    _/  _/        _/        _/    _/      _/    _/  _/    _/  _/    _/  _/  _/     ");
     System.out.println("    _/    _/  _/_/_/    _/_/_/    _/_/_/        _/    _/  _/_/_/_/  _/_/_/    _/_/        ");
@@ -287,7 +313,7 @@ public class App {
   }
 
   static void printStageClear() {
-    cScreenDelay(1000);
+    // cScreenDelay(1000);
     System.out.println(
         "       _/_/_/  _/_/_/_/_/    _/_/      _/_/_/  _/_/_/_/        _/_/_/  _/        _/_/_/_/    _/_/    _/_/_/        _/  _/  ");
     System.out.println(
@@ -302,13 +328,13 @@ public class App {
   }
 
   static void printStart() {
-    cScreenDelay(1000);
+    // cScreenDelay(1000);
     System.out.println("    _/_/_/    _/_/_/_/    _/_/    _/_/_/    _/      _/       ");
     System.out.println("   _/    _/  _/        _/    _/  _/    _/    _/  _/          ");
     System.out.println("  _/_/_/    _/_/_/    _/_/_/_/  _/    _/      _/             ");
     System.out.println(" _/    _/  _/        _/    _/  _/    _/      _/              ");
     System.out.println("_/    _/  _/_/_/_/  _/    _/  _/_/_/        _/               ");
-    cScreenDelay(1000);
+    // cScreenDelay(1000);
     System.out.println("       _/_/_/    _/_/        _/      _/       ");
     System.out.println("    _/        _/    _/      _/      _/        ");
     System.out.println("   _/  _/_/  _/    _/      _/      _/         ");
