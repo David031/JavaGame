@@ -111,15 +111,15 @@ public class App {
         option = userOption();
 
         if (option == 1) {
-          fight();
+          fight(enemy, XType.Q);
         } else if (option == 2) {
-          fight();
+          fight(enemy, XType.W);
         } else if (option == 3) {
-          fight();
+          fight(enemy, XType.E);
         } else if (option == 4) {
-          fight();
+          fight(enemy, XType.R);
         } else if (option == 5) {
-          fight();
+          fight(enemy, XType.A);
         } else if (option == 6) {
 
         }
@@ -127,11 +127,73 @@ public class App {
     }
     if (enemy.hp <= 0) {
       // TODO: After Enemy dead
+      player.levelCheck(100);
     }
   }
 
-  static void fight() {
+  static int damageCalc(int damge, int def) {
+    return (damge - def);
+  }
+
+  static void fight(Enemy enemy, XType type) {
     // TODO:Fight
+    int pxQ = player.xQ();
+    int pxW = player.xW();
+    int pxE = player.xE();
+    int pxR = player.xR();
+    int pxA = player.xA();
+    switch (type) {
+    case Q:
+      // AD
+      if (pxQ == 0) {
+        System.out.println("Cooling Down ..");
+      } else {
+        enemy.hp -= damageCalc(pxQ, enemy.ar);
+        System.out.println("Produce " + damageCalc(pxQ, enemy.ar) + "Damage");
+      }
+      break;
+    case W:
+      // AP
+      if (pxW == 0) {
+        System.out.println("Cooling Down ..");
+      } else {
+        enemy.hp -= damageCalc(pxW, enemy.mr);
+        System.out.println("Produce " + damageCalc(pxW, enemy.mr) + "Damage");
+      }
+      break;
+    case E:
+      // AD
+      if (pxE == 0) {
+        System.out.println("Cooling Down ..");
+      } else {
+        enemy.hp -= damageCalc(pxE, enemy.ar);
+        System.out.println("Produce " + damageCalc(pxE, enemy.ar) + "Damage");
+      }
+      break;
+    case R:
+      // AP
+      if (pxR == 0) {
+        System.out.println("Cooling Down ..");
+      } else {
+        enemy.hp -= damageCalc(pxR, enemy.mr);
+        System.out.println("Produce " + damageCalc(pxR, enemy.mr) + "Damage");
+      }
+      break;
+    case A:
+      // AD
+      enemy.hp -= damageCalc(pxA, enemy.ar);
+      System.out.println("Produce " + damageCalc(pxA, enemy.ar) + "Damage");
+      break;
+    default:
+      break;
+    }
+    int eAd = enemy.adA();
+    int eAp = enemy.apA();
+    int enemyA = eAd + eAp;
+    if (enemyA > (enemy.ad + enemy.ap)) {
+      System.out.println("Enemy Critical hit !! ");
+    }
+    //TODO:Enemy Damage
   }
 
   static void mainControlPanel() {

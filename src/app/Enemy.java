@@ -32,31 +32,36 @@ public class Enemy {
   }
 
   void initBossAttributes() {
-    hp = 280 * mapLevel * (random.nextInt(7) + 1);
-    ad = 200 * mapLevel * (random.nextInt(2) + 1);
-    ap = 180 * mapLevel * (random.nextInt(2) + 1);
-    ar = 130 * mapLevel * (random.nextInt(2) + 1);
-    mr = 120 * mapLevel * (random.nextInt(2) + 1);
-    cr = 2 * mapLevel * (random.nextInt(2) + 1);
-    dr = 80;
-    x = (random.nextInt(13) + 1);
-    y = (random.nextInt(13) + 1);
+    this.hp = 280 * mapLevel * (random.nextInt(7) + 1);
+    this.ad = 200 * mapLevel * (random.nextInt(2) + 1);
+    this.ap = 180 * mapLevel * (random.nextInt(2) + 1);
+    this.ar = 130 * mapLevel * (random.nextInt(2) + 1);
+    this.mr = 120 * mapLevel * (random.nextInt(2) + 1);
+    this.cr = 2 * mapLevel * (random.nextInt(2) + 1);
+    this.dr = 80;
+    this.x = (random.nextInt(13) + 1);
+    this.y = (random.nextInt(13) + 1);
   }
 
   void initMinionAttributes() {
-    hp = 120 * mapLevel * (random.nextInt(4) + 1);
-    ad = 100 * mapLevel * (random.nextInt(3) + 1);
-    ap = 100 * mapLevel * (random.nextInt(3) + 1);
-    ar = 100 * mapLevel * (random.nextInt(3) + 1);
-    mr = 100 * mapLevel * (random.nextInt(3) + 1);
-    cr = 4 * mapLevel;
-    dr = 20;
-    x = (random.nextInt(13) + 1);
-    y = (random.nextInt(13) + 1);
+    this.hp = 120 * mapLevel * (random.nextInt(4) + 1);
+    this.ad = 100 * mapLevel * (random.nextInt(3) + 1);
+    this.ap = 100 * mapLevel * (random.nextInt(3) + 1);
+    this.ar = 100 * mapLevel * (random.nextInt(3) + 1);
+    this.mr = 100 * mapLevel * (random.nextInt(3) + 1);
+    this.cr = 4 * mapLevel;
+    this.dr = 20;
+    this.x = (random.nextInt(13) + 1);
+    this.y = (random.nextInt(13) + 1);
   }
 
   boolean isCC() {
-    return false;
+    int crc = (random.nextInt(100) + 1);
+    if (crc<=cr) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   int adA() {
