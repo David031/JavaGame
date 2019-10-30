@@ -120,6 +120,7 @@ public class Player {
 
   int xA() {
     mp += 10;
+    cdReduce(XType.A);
     if (isCC()) {
       return ad * 2;
     } else {

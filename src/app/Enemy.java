@@ -33,8 +33,8 @@ public class Enemy {
 
   void initBossAttributes() {
     this.hp = 280 * mapLevel * (random.nextInt(7) + 1);
-    this.ad = 200 * mapLevel;
-    this.ap = 180 * mapLevel;
+    this.ad = 250 * mapLevel;
+    this.ap = 252 * mapLevel;
     this.ar = 130 * mapLevel * (random.nextInt(2) + 1);
     this.mr = 120 * mapLevel * (random.nextInt(2) + 1);
     this.cr = 2 * mapLevel * (random.nextInt(2) + 1);

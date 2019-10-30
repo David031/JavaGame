@@ -28,7 +28,7 @@ public class App {
 
   static void initMap(String map[][]) {
     for (int i = 0; i < 5; i++) {
-      map[minion[0][i].x][minion[0][i].y] = "E ";
+      map[minion[mapLevel - 1][i].x][minion[mapLevel - 1][i].y] = "E ";
     }
     map[player.x][player.y] = "P ";
   }
@@ -127,20 +127,20 @@ public class App {
       }
     }
     if (enemy.hp <= 0) {
-      // TODO: After Enemy dead
       currentMap[enemy.x][enemy.y] = "  ";
       player.levelCheck(100);
     }
     if (player.hp <= 0) {
       System.out.println("Game Over!!");
     }
+    checkEnemy();
   }
 
   static void checkEnemy() {
     int count = 0;
     for (int i = 0; i < 5; i++) {
       if (minion[mapLevel - 1][i].hp <= 0) {
-        count = +1;
+        count += 1;
       }
     }
     if (boss[mapLevel - 1].hp <= 0) {
@@ -149,10 +149,15 @@ public class App {
     if (count == 5) {
       currentMap[boss[mapLevel - 1].x][boss[mapLevel - 1].y] = "B ";
     } else if (count == 6) {
-      mapLevel += 1;
-      currentMap = gameMap.getMap(mapLevel);
-      initMap(currentMap);
+      printStageClear();
+      stageClearMap();
     }
+  }
+
+  static void stageClearMap() {
+    currentMap[11][14] = "⇀ ";
+    currentMap[12][14] = "  ";
+    currentMap[13][14] = "⇁ ";
   }
 
   static int damageCalc(int damge, int def) {
@@ -267,14 +272,19 @@ public class App {
       } else if (map[x][y] == "B ") {
         System.out.println(" You see Boss !!");
         vsControlPanel(getEnemyByXY(x, y, EnemyType.Boss));
+      } else if (player.x == 12 && player.y == 14) {
+        mapLevel += 1;
+        if (mapLevel >= 15) {
+          // TODO: Game End
+        }
+        // currentMap = gameMap.getMap(mapLevel);
+        initMap(map);
       } else {
         System.out.println("Don't hit the wall !!");
       }
     } else {
       System.out.println("Don't hit the wall !!");
     }
-    // cScreenDelay(1000);
-    printMap(map);
   }
 
   static void cScreenDelay(int ms) {
@@ -358,6 +368,7 @@ public class App {
 
   public static void main(String[] args) throws Exception {
     init();
+    printBanner();
     mainControlPanel();
   }
 }
