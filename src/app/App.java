@@ -4,8 +4,6 @@ import java.util.Scanner;
 
 public class App {
   static Map gameMap = new Map();
-  static int px;
-  static int py;
   static Enemy boss[] = new Enemy[15];
   static Enemy minion[][] = new Enemy[15][5];
   static Player player = new Player();
@@ -14,8 +12,6 @@ public class App {
   static String currentMap[][];
 
   static void init() {
-    px = 2;
-    py = 0;
     mapLevel = 1;
     for (int i = 0; i < boss.length; i++) {
       boss[i] = new Enemy(EnemyType.Boss, i + 1);
@@ -25,7 +21,7 @@ public class App {
         minion[i][j] = new Enemy(EnemyType.Minion, i + 1);
       }
     }
-    currentMap = gameMap.map1;
+    currentMap = gameMap.getMap(mapLevel);
     initMap(currentMap);
     // printBanner();
   }
@@ -34,7 +30,7 @@ public class App {
     for (int i = 0; i < 5; i++) {
       map[minion[0][i].x][minion[0][i].y] = "E ";
     }
-    map[px][py] = "P ";
+    map[player.x][player.y] = "P ";
   }
 
   static void gameControPanel() {
@@ -42,15 +38,17 @@ public class App {
     int option = 0;
     while (option != 1 && option != 2 && option != 3 && option != 4 && option != -1) {
       while (option != -1) {
-        cScreenDelay();
+        cScreenDelay(100);
         System.out.println("Game Control Panel");
         System.out.println("--Game Map--");
         printMap(currentMap);
-        System.out.println();
         System.out.println("Current Map Level " + mapLevel);
+        System.out.println();
         System.out.println("Player Status : ");
-        System.out.println(" HP " + player.hp);
-        System.out.println(" MP " + player.mp);
+        System.out.println(" HP : " + player.hp);
+        System.out.println(" MP : " + player.mp);
+        System.out.println(" Level : " + player.level);
+        System.out.println(" XP : " + player.xp);
         System.out.println();
         System.out.println("Control Option : ");
         System.out.println("1. Move Up");
@@ -62,40 +60,84 @@ public class App {
         option = userOption();
 
         if (option == 1) {
-          playerMove(px - 1, py, currentMap);
+          playerMove(player.x - 1, player.y, currentMap);
         } else if (option == 2) {
-          playerMove(px + 1, py, currentMap);
+          playerMove(player.x + 1, player.y, currentMap);
         } else if (option == 3) {
-          playerMove(px, py - 1, currentMap);
+          playerMove(player.x, player.y - 1, currentMap);
         } else if (option == 4) {
-          playerMove(px, py + 1, currentMap);
+          playerMove(player.x, player.y + 1, currentMap);
         } else if (option == 5) {
           inventoryControlPanel();
-          //TODO:Inventory
+
         }
       }
 
     }
   }
 
-  static void vsControlPanel() {
-    cScreenDelay();
-    System.out.println("Frighting Control Panel");
-  }
-
   static void inventoryControlPanel() {
-    cScreenDelay();
+    cScreenDelay(100);
     System.out.println("Inventory Control Panel");
+    // TODO:Inventory
   }
 
-  static void vsPart(Enemy enemy) {
+  static void vsControlPanel(Enemy enemy) {
+    int option = 0;
+    while (option != 1 && option != 2 && option != 3 && option != 4 && option != -1) {
+      while (option != -1 && enemy.hp > 0) {
+        cScreenDelay(100);
+        System.out.println("VS Control Panel");
+        System.out.println("Current Map Level " + mapLevel);
+        System.out.println();
+        // TODO:Change name
+        System.out.println("You Meet a Minion !!");
+        System.out.println();
+        System.out.println("Enemy Status : ");
+        System.out.println(" HP : " + enemy.hp);
+        System.out.println();
+        System.out.println("Player Status : ");
+        System.out.println(" HP : " + player.hp);
+        System.out.println(" MP : " + player.mp);
+        System.out.println();
+        System.out.println("Control Option : ");
+        System.out.println("1. Q");
+        System.out.println("2. W");
+        System.out.println("3. E");
+        System.out.println("4. R");
+        System.out.println("5. A");
+        System.out.println("6. Inventory");
+        System.out.println("-1. Exit");
+        option = userOption();
 
+        if (option == 1) {
+          fight();
+        } else if (option == 2) {
+          fight();
+        } else if (option == 3) {
+          fight();
+        } else if (option == 4) {
+          fight();
+        } else if (option == 5) {
+          fight();
+        } else if (option == 6) {
+
+        }
+      }
+    }
+    if (enemy.hp <= 0) {
+      // TODO: After Enemy dead
+    }
+  }
+
+  static void fight() {
+    // TODO:Fight
   }
 
   static void mainControlPanel() {
     int option = 0;
     while (option != 1 && option != 2) {
-      cScreenDelay();
+      cScreenDelay(100);
       System.out.println("Wellcome to DeepDark ");
       System.out.println("Control Option : ");
       System.out.println("1. Start");
@@ -107,34 +149,49 @@ public class App {
     }
   }
 
+  static Enemy getEnemyByXY(int x, int y, EnemyType type) {
+    Enemy tEnemy = new Enemy(type, mapLevel);
+
+    if (type == EnemyType.Minion) {
+      for (Enemy enemy : minion[mapLevel - 1]) {
+        if (enemy.x == x && enemy.y == y) {
+          tEnemy = enemy;
+        }
+      }
+    } else {
+      tEnemy = boss[mapLevel - 1];
+    }
+    return tEnemy;
+  }
+
   static void playerMove(int x, int y, String map[][]) {
-    int oldx = px;
-    int oldy = py;
+    int oldx = player.x;
+    int oldy = player.y;
     if (x >= 0 && y >= 0) {
       if (map[x][y] == "  ") {
-        px = x;
-        py = y;
+        player.x = x;
+        player.y = y;
         map[oldx][oldy] = "  ";
-        map[px][py] = "P ";
+        map[player.x][player.y] = "P ";
       } else if (map[x][y] == "E ") {
         System.out.println(" You see Enemy !!");
-        //TODO: Fighting
+        vsControlPanel(getEnemyByXY(x, y, EnemyType.Minion));
       } else if (map[x][y] == "B ") {
         System.out.println(" You see Boss !!");
-         //TODO: Fighting
+        vsControlPanel(getEnemyByXY(x, y, EnemyType.Boss));
       } else {
         System.out.println("Don't hit the wall !!");
       }
     } else {
       System.out.println("Don't hit the wall !!");
     }
-    cScreenDelay();
+    cScreenDelay(1000);
     printMap(map);
   }
 
-  static void cScreenDelay() {
+  static void cScreenDelay(int ms) {
     try {
-      Thread.sleep(1000);
+      Thread.sleep(ms);
       clearScreen();
     } catch (InterruptedException e) {
       e.printStackTrace();
@@ -152,13 +209,13 @@ public class App {
     System.out.println("   _/    _/    _/  _/_/_/    _/        _/        _/        _/    _/  _/  _/  _/  _/_/_/   ");
     System.out.println("    _/  _/  _/    _/        _/        _/        _/        _/    _/  _/      _/  _/        ");
     System.out.println("     _/  _/      _/_/_/_/  _/_/_/_/  _/_/_/_/    _/_/_/    _/_/    _/      _/  _/_/_/_/   ");
-    cScreenDelay();
+    cScreenDelay(1000);
     System.out.println("                                  _/_/_/_/_/    _/_/                                      ");
     System.out.println("                                     _/      _/    _/                                     ");
     System.out.println("                                    _/      _/    _/                                      ");
     System.out.println("                                   _/      _/    _/                                       ");
     System.out.println("                                  _/        _/_/                                          ");
-    cScreenDelay();
+    cScreenDelay(1000);
     System.out.println("     _/_/_/    _/_/_/_/  _/_/_/_/  _/_/_/        _/_/_/      _/_/    _/_/_/    _/    _/   ");
     System.out.println("     _/    _/  _/        _/        _/    _/      _/    _/  _/    _/  _/    _/  _/  _/     ");
     System.out.println("    _/    _/  _/_/_/    _/_/_/    _/_/_/        _/    _/  _/_/_/_/  _/_/_/    _/_/        ");
@@ -168,7 +225,7 @@ public class App {
   }
 
   static void printStageClear() {
-    cScreenDelay();
+    cScreenDelay(1000);
     System.out.println(
         "       _/_/_/  _/_/_/_/_/    _/_/      _/_/_/  _/_/_/_/        _/_/_/  _/        _/_/_/_/    _/_/    _/_/_/        _/  _/  ");
     System.out.println(
@@ -183,13 +240,13 @@ public class App {
   }
 
   static void printStart() {
-    cScreenDelay();
+    cScreenDelay(1000);
     System.out.println("    _/_/_/    _/_/_/_/    _/_/    _/_/_/    _/      _/       ");
     System.out.println("   _/    _/  _/        _/    _/  _/    _/    _/  _/          ");
     System.out.println("  _/_/_/    _/_/_/    _/_/_/_/  _/    _/      _/             ");
     System.out.println(" _/    _/  _/        _/    _/  _/    _/      _/              ");
     System.out.println("_/    _/  _/_/_/_/  _/    _/  _/_/_/        _/               ");
-    cScreenDelay();
+    cScreenDelay(1000);
     System.out.println("       _/_/_/    _/_/        _/      _/       ");
     System.out.println("    _/        _/    _/      _/      _/        ");
     System.out.println("   _/  _/_/  _/    _/      _/      _/         ");
