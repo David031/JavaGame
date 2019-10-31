@@ -1,0 +1,2 @@
+# JavaGame
+For school assignment 
