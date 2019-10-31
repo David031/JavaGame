@@ -35,7 +35,7 @@ public class App {
     }
     currentMap = gameMap.getMap(mapLevel);
     initMap(currentMap);
-    // printBanner();
+       printBanner();
   }
 
   static void initMap(String map[][]) {
@@ -51,7 +51,7 @@ public class App {
     int option = 0;
     while (option != 1 && option != 2 && option != 3 && option != 4 && option != -1) {
       while (option != -1 && player.hp > 0) {
-        // cScreenDelay(100);
+           
         System.out.println();
         System.out.println("---------------------------");
         System.out.println("Game Control Panel");
@@ -93,7 +93,7 @@ public class App {
   }
 
   static void inventoryControlPanel() {
-    // cScreenDelay(100);
+       
     int option = 0;
 
     while (option != -1) {
@@ -121,13 +121,12 @@ public class App {
     int option = 0;
     while (option != 1 && option != 2 && option != 3 && option != 4 && option != 5 && option != 6 && option != -1) {
       while (option != -1 && enemy.hp > 0 && player.hp > 0) {
-        // cScreenDelay(1000);
+           
         System.out.println();
         System.out.println("---------------------------");
         System.out.println("VS Control Panel");
         System.out.println("Current Map Level " + mapLevel);
         System.out.println();
-        // TODO:Change name
         System.out.println("You Meet a " + enemy.enemyType.toString() + " !!");
         System.out.println();
         System.out.println("Enemy Status : ");
@@ -259,7 +258,6 @@ public class App {
   }
 
   static void fight(Enemy enemy, XType type) {
-    // TODO:Fight
     switch (type) {
     case Q:
       applyDamage(enemy, player.xQ());
@@ -271,11 +269,9 @@ public class App {
       applyDamage(enemy, player.xE());
       break;
     case R:
-      // AP
       applyDamage(enemy, player.xR());
       break;
     case A:
-      // AD
       int pxA = player.xA();
 
       int eAd = enemy.adA();
@@ -308,7 +304,7 @@ public class App {
   static void mainControlPanel() {
     int option = 0;
     while (option != 1 && option != 2) {
-      // cScreenDelay(100);
+         
       System.out.println();
       System.out.println("Wellcome to DeepDark ");
       System.out.println();
@@ -330,7 +326,6 @@ public class App {
       try {
         Thread.sleep(2000);
       } catch (InterruptedException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
       System.out.println("Cooling Down ..");
@@ -338,7 +333,6 @@ public class App {
       try {
         Thread.sleep(2000);
       } catch (InterruptedException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
       System.out.println("No more mp...");
@@ -401,35 +395,19 @@ public class App {
       if (x == 12 && y == 14) {
         mapLevel += 1;
         if (mapLevel >= 15) {
-          // TODO: Game End
           System.out.println("Mission Complete");
+        }else{
+          currentMap[11][14] = "# ";
+          currentMap[12][14] = "# ";
+          currentMap[13][14] = "# ";
+          player.x = 2;
+          player.y = 0;
+          initMap(map);
         }
-        currentMap[11][14] = "# ";
-        currentMap[12][14] = "# ";
-        currentMap[13][14] = "# ";
-
-        player.x = 2;
-        player.y = 0;
-        // currentMap = gameMap.getMap(mapLevel);
-        initMap(map);
       }
     } else {
       System.out.println("Don't hit the wall !!");
     }
-  }
-
-  static void cScreenDelay(int ms) {
-    try {
-      Thread.sleep(ms);
-      clearScreen();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-  }
-
-  static void clearScreen() {
-    System.out.print("\033[H\033[2J");
-    System.out.flush();
   }
 
   static void printBanner() {
@@ -439,14 +417,14 @@ public class App {
     System.out.println("   _/    _/    _/  _/_/_/    _/        _/        _/        _/    _/  _/  _/  _/  _/_/_/   ");
     System.out.println("    _/  _/  _/    _/        _/        _/        _/        _/    _/  _/      _/  _/        ");
     System.out.println("     _/  _/      _/_/_/_/  _/_/_/_/  _/_/_/_/    _/_/_/    _/_/    _/      _/  _/_/_/_/   ");
-    // cScreenDelay(1000);
+       
     System.out.println();
     System.out.println("                                  _/_/_/_/_/    _/_/                                      ");
     System.out.println("                                     _/      _/    _/                                     ");
     System.out.println("                                    _/      _/    _/                                      ");
     System.out.println("                                   _/      _/    _/                                       ");
     System.out.println("                                  _/        _/_/                                          ");
-    // cScreenDelay(1000);
+       
     System.out.println();
     System.out.println("     _/_/_/    _/_/_/_/  _/_/_/_/  _/_/_/        _/_/_/      _/_/    _/_/_/    _/    _/   ");
     System.out.println("     _/    _/  _/        _/        _/    _/      _/    _/  _/    _/  _/    _/  _/  _/     ");
@@ -457,7 +435,7 @@ public class App {
   }
 
   static void printStageClear() {
-    // cScreenDelay(1000);
+       
     System.out.println();
     System.out.println(
         "       _/_/_/  _/_/_/_/_/    _/_/      _/_/_/  _/_/_/_/        _/_/_/  _/        _/_/_/_/    _/_/    _/_/_/        _/  _/  ");
@@ -473,14 +451,14 @@ public class App {
   }
 
   static void printStart() {
-    // cScreenDelay(1000);
+       
     System.out.println();
     System.out.println("    _/_/_/    _/_/_/_/    _/_/    _/_/_/    _/      _/       ");
     System.out.println("   _/    _/  _/        _/    _/  _/    _/    _/  _/          ");
     System.out.println("  _/_/_/    _/_/_/    _/_/_/_/  _/    _/      _/             ");
     System.out.println(" _/    _/  _/        _/    _/  _/    _/      _/              ");
     System.out.println("_/    _/  _/_/_/_/  _/    _/  _/_/_/        _/               ");
-    // cScreenDelay(1000);
+       
     System.out.println();
     System.out.println("       _/_/_/    _/_/        _/      _/       ");
     System.out.println("    _/        _/    _/      _/      _/        ");
