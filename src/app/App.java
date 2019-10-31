@@ -1,5 +1,6 @@
 package app;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App {
@@ -27,6 +28,7 @@ public class App {
   }
 
   static void initMap(String map[][]) {
+
     for (int i = 0; i < 5; i++) {
       map[minion[mapLevel - 1][i].x][minion[mapLevel - 1][i].y] = "E ";
     }
@@ -138,9 +140,12 @@ public class App {
 
   static void checkEnemy() {
     int count = 0;
+    ArrayList<Enemy> enemiesLrft = new ArrayList<Enemy>();
     for (int i = 0; i < 5; i++) {
       if (minion[mapLevel - 1][i].hp <= 0) {
         count += 1;
+      } else {
+        enemiesLrft.add(minion[mapLevel - 1][i]);
       }
     }
     if (boss[mapLevel - 1].hp <= 0) {
@@ -151,6 +156,10 @@ public class App {
     } else if (count == 6) {
       printStageClear();
       stageClearMap();
+    } else {
+      for (Enemy enemy : enemiesLrft) {
+        currentMap[enemy.x][enemy.y] = "E ";
+      }
     }
   }
 
@@ -188,17 +197,22 @@ public class App {
     case A:
       // AD
       int pxA = player.xA();
+
       int eAd = enemy.adA();
       int eAp = enemy.apA();
       int enemyA = eAd + eAp;
+
+      int enemyTA = damageCalc(eAd, player.ar) + damageCalc(eAp, player.mr);
+
       enemy.hp -= damageCalc(pxA, enemy.ar);
       System.out.println("Produce " + damageCalc(pxA, enemy.ar) + " Damage");
 
       if (enemyA > (enemy.ad + enemy.ap)) {
-        System.out.println("Enemy Critical hit !! ");
+        System.out.println("Enemy Critical hit !! " + "Enemy produce " + enemyTA + " Damage");
+      } else {
+        System.out.println("Enemy produce " + enemyTA + " Damage");
       }
-      // TODO:Enemy Damage
-      player.hp -= damageCalc(eAd, player.ar) + damageCalc(eAp, player.mr);
+      player.hp -= enemyTA;
       System.out.println("HP left " + player.hp);
       break;
     default:
@@ -234,12 +248,15 @@ public class App {
       int eAd = enemy.adA();
       int eAp = enemy.apA();
       int enemyA = eAd + eAp;
+      int enemyTA = damageCalc(eAd, player.ar) + damageCalc(eAp, player.mr);
       enemy.hp -= damageCalc(px, enemy.mr);
       System.out.println("Produce " + damageCalc(px, enemy.mr) + " Damage");
       if (enemyA > (enemy.ad + enemy.ap)) {
-        System.out.println("Enemy Critical hit !! ");
+        System.out.println("Enemy Critical hit !! " + "Enemy produce " + enemyTA + " Damage");
+      } else {
+        System.out.println("Enemy produce " + enemyTA + " Damage");
       }
-      player.hp -= damageCalc(eAd, player.ar) + damageCalc(eAp, player.mr);
+      player.hp -= enemyTA;
     }
   }
 
@@ -273,15 +290,23 @@ public class App {
       } else if (map[x][y] == "B ") {
         System.out.println(" You see Boss !!");
         vsControlPanel(getEnemyByXY(x, y, EnemyType.Boss));
-      } else if (player.x == 12 && player.y == 14) {
+      } else {
+        System.out.println("Don't hit the wall !!");
+      }
+      if (x == 12 && y == 14) {
         mapLevel += 1;
         if (mapLevel >= 15) {
           // TODO: Game End
+          System.out.println("Mission Complete");
         }
+        currentMap[11][14] = "# ";
+        currentMap[12][14] = "# ";
+        currentMap[13][14] = "# ";
+
+        player.x = 2;
+        player.y = 0;
         // currentMap = gameMap.getMap(mapLevel);
         initMap(map);
-      } else {
-        System.out.println("Don't hit the wall !!");
       }
     } else {
       System.out.println("Don't hit the wall !!");

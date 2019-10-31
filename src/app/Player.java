@@ -51,7 +51,7 @@ public class Player {
   }
 
   void levelUp() {
-    hp *= 1.2;
+    hp *= 1.5;
     mp *= 1.2;
     ad *= 1.2;
     ap *= 1.2;
