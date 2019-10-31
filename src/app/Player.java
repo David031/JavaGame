@@ -40,6 +40,20 @@ public class Player {
     this.rCd = 0;
   }
 
+  void itemUse(int index) {
+    Item item = inventory.get(index);
+    inventory.remove(index);
+
+    hp += item.hp;
+    mp += item.mp;
+    ad += item.ad;
+    ap += item.ap;
+    ar += item.ar;
+    mr += item.mr;
+    cr += item.cr;
+    System.out.println("Item used " + item.name + ". ");
+  }
+
   void levelCheck(int xpAdd) {
     xp += xpAdd;
     if (xp >= (level * 1.5)) {
@@ -51,7 +65,7 @@ public class Player {
   }
 
   void levelUp() {
-    hp *= 1.5;
+    hp *= 1.4;
     mp *= 1.2;
     ad *= 1.2;
     ap *= 1.2;
@@ -69,51 +83,61 @@ public class Player {
   }
 
   int xQ() {
-
-    if (qCd > 0 || mp <= 0) {
+    int mpCost = (int) (10 * level * 0.5);
+    if (qCd > 0) {
       return 0;
+    } else if (mp <= mpCost) {
+      return -1;
     } else {
       cdReduce(XType.Q);
       qCd += 3;
-      mp -= 10;
+      mp -= mpCost;
       return ad + (random.nextInt(100) + 1);
     }
 
   }
 
   int xW() {
-
-    if (wCd > 0 || mp <= 0) {
+    int mpCost = (int) (10 * level * 0.5);
+    if (wCd > 0) {
       return 0;
+    } else if (mp <= mpCost) {
+      return -1;
     } else {
       cdReduce(XType.W);
       wCd += 4;
-      mp -= 20;
+      mp -= mpCost;
       return ap + (random.nextInt(100) + 1);
     }
   }
 
   int xE() {
+    int mpCost = (int) (20 * level * 0.5);
 
-    if (eCd > 0 || mp <= 0) {
+    if (eCd > 0) {
       return 0;
+    } else if (mp <= mpCost) {
+      return -1;
     } else {
       cdReduce(XType.E);
       eCd += 5;
-      mp -= 40;
+      mp -= mpCost;
       return ad + (random.nextInt(100) + 1);
-      
+
     }
   }
 
   int xR() {
+    int mpCost = (int) (30 * level * 0.5);
 
-    if (rCd > 0 || mp <= 0) {
+    if (rCd > 0) {
       return 0;
+    } else if (mp <= mpCost) {
+      return -1;
     } else {
       cdReduce(XType.R);
       rCd += 8;
-      mp -= 60;
+      mp -= mpCost;
       return ap * 2 + (random.nextInt(100) + 1);
     }
   }

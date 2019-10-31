@@ -45,10 +45,10 @@ public class Enemy {
 
   void initMinionAttributes() {
     this.hp = 120 * mapLevel;
-    this.ad = 100 * mapLevel;
-    this.ap = 100 * mapLevel;
-    this.ar = 100 * mapLevel;
-    this.mr = 100 * mapLevel;
+    this.ad = 120 * mapLevel;
+    this.ap = 110 * mapLevel;
+    this.ar = 120 * mapLevel;
+    this.mr = 120 * mapLevel;
     this.cr = 4 + mapLevel;
     this.dr = 20;
     this.x = (random.nextInt(13) + 1);
@@ -81,8 +81,12 @@ public class Enemy {
   }
 
   boolean isDrop() {
-    // TODO:Drop Item
-    return false;
+    int drc = (random.nextInt(100) + 1);
+    if (drc <= dr) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 

@@ -1,6 +1,7 @@
 package app;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class App {
@@ -11,6 +12,16 @@ public class App {
   static int mapLevel;
   static Scanner scanner = new Scanner(System.in);
   static String currentMap[][];
+  static Item allItem[] = new Item[5];
+  static Random random = new Random();
+
+  static void itemInit() {
+    allItem[0] = new Item("Red Buff", 0, 0, 100, 0, 0, 0, 10);
+    allItem[1] = new Item("Blue Buff", 0, 0, 0, 100, 0, 0, 10);
+    allItem[2] = new Item("First Aid Kit", 200, 0, 0, 0, 0, 0, 0);
+    allItem[3] = new Item("Super Armor", 500, 0, 0, 0, 500, 500, 0);
+    allItem[4] = new Item("Super Weapon", 0, 0, 500, 500, 0, 0, 0);
+  }
 
   static void init() {
     mapLevel = 1;
@@ -41,6 +52,8 @@ public class App {
     while (option != 1 && option != 2 && option != 3 && option != 4 && option != -1) {
       while (option != -1 && player.hp > 0) {
         // cScreenDelay(100);
+        System.out.println();
+        System.out.println("---------------------------");
         System.out.println("Game Control Panel");
         System.out.println("--Game Map--");
         printMap(currentMap);
@@ -59,6 +72,7 @@ public class App {
         System.out.println("4. Move Right");
         System.out.println("5. Inventory");
         System.out.println("-1. Exit Game");
+        System.out.println("---------------------------");
         option = userOption();
 
         if (option == 1) {
@@ -80,8 +94,27 @@ public class App {
 
   static void inventoryControlPanel() {
     // cScreenDelay(100);
-    System.out.println("Inventory Control Panel");
-    // TODO:Inventory
+    int option = 0;
+
+    while (option != -1) {
+      System.out.println();
+      System.out.println("---------------------------");
+      System.out.println("Inventory Control Panel");
+      System.out.println();
+      System.out.println("Enter the number of item you want to use.");
+      System.out.println();
+      for (int i = 0; i < player.inventory.size(); i++) {
+        System.out.println(i + ". " + player.inventory.get(i).name);
+      }
+      System.out.println("-1. Exit");
+      System.out.println("---------------------------");
+      option = userOption();
+      if (option == -1) {
+
+      } else if (option < player.inventory.size() && option >= 0) {
+        player.itemUse(option);
+      }
+    }
   }
 
   static void vsControlPanel(Enemy enemy) {
@@ -89,18 +122,27 @@ public class App {
     while (option != 1 && option != 2 && option != 3 && option != 4 && option != 5 && option != 6 && option != -1) {
       while (option != -1 && enemy.hp > 0 && player.hp > 0) {
         // cScreenDelay(1000);
+        System.out.println();
+        System.out.println("---------------------------");
         System.out.println("VS Control Panel");
         System.out.println("Current Map Level " + mapLevel);
         System.out.println();
         // TODO:Change name
-        System.out.println("You Meet a Minion !!");
+        System.out.println("You Meet a " + enemy.enemyType.toString() + " !!");
         System.out.println();
         System.out.println("Enemy Status : ");
         System.out.println(" HP : " + enemy.hp);
         System.out.println();
         System.out.println("Player Status : ");
-        System.out.println(" HP : " + player.hp);
-        System.out.println(" MP : " + player.mp);
+        System.out.println(" HP : " + player.hp + "| MP : " + player.mp);
+        System.out.println(" AD : " + player.ad + "| AP : " + player.ap);
+        System.out.println(" AR : " + player.ar + "| MR : " + player.mr);
+        System.out.println(" CR : " + player.cr);
+        System.out.println(" Level : " + player.level);
+        System.out.println();
+        System.out.println("Cool Down Counting : ");
+        System.out.println(" Q-CD : " + player.qCd + "| W-CD : " + player.wCd);
+        System.out.println(" E-CD : " + player.eCd + "| R-CD : " + player.rCd);
         System.out.println();
         System.out.println("Control Option : ");
         System.out.println("1. Q");
@@ -110,6 +152,7 @@ public class App {
         System.out.println("5. A");
         System.out.println("6. Inventory");
         System.out.println("-1. Exit");
+        System.out.println("---------------------------");
         option = userOption();
 
         if (option == 1) {
@@ -123,7 +166,7 @@ public class App {
         } else if (option == 5) {
           fight(enemy, XType.A);
         } else if (option == 6) {
-
+          inventoryControlPanel();
         }
 
       }
@@ -131,11 +174,48 @@ public class App {
     if (enemy.hp <= 0) {
       currentMap[enemy.x][enemy.y] = "  ";
       player.levelCheck(100);
+      if (enemy.isDrop() && enemy.enemyType == EnemyType.Boss) {
+        int drc = (random.nextInt(100) + 1);
+        if (drc == 26) {
+          player.inventory.add(allItem[3]);
+          System.out.println("You get a " + allItem[3].name);
+        } else if (drc == 30) {
+          player.inventory.add(allItem[4]);
+          System.out.println("You get a " + allItem[4].name);
+        } else {
+          itemDrop();
+        }
+      } else if (enemy.isDrop() && enemy.enemyType == EnemyType.Minion) {
+        itemDrop();
+      } else {
+        System.out.println("No item drop....");
+      }
     }
     if (player.hp <= 0) {
       System.out.println("Game Over!!");
     }
     checkEnemy();
+  }
+
+  static void itemDrop() {
+    int randItem = (random.nextInt(3) + 1);
+    switch (randItem - 1) {
+    case 0:
+      player.inventory.add(allItem[0]);
+      System.out.println("You get a " + allItem[0].name);
+      break;
+    case 1:
+      player.inventory.add(allItem[1]);
+      System.out.println("You get a " + allItem[1].name);
+      break;
+    case 2:
+      player.inventory.add(allItem[2]);
+      System.out.println("You get a " + allItem[2].name);
+      break;
+    default:
+      break;
+    }
+
   }
 
   static void checkEnemy() {
@@ -205,7 +285,7 @@ public class App {
       int enemyTA = damageCalc(eAd, player.ar) + damageCalc(eAp, player.mr);
 
       enemy.hp -= damageCalc(pxA, enemy.ar);
-      System.out.println("Produce " + damageCalc(pxA, enemy.ar) + " Damage");
+      System.out.println("You produce " + damageCalc(pxA, enemy.ar) + " Damage");
 
       if (enemyA > (enemy.ad + enemy.ap)) {
         System.out.println("Enemy Critical hit !! " + "Enemy produce " + enemyTA + " Damage");
@@ -213,7 +293,12 @@ public class App {
         System.out.println("Enemy produce " + enemyTA + " Damage");
       }
       player.hp -= enemyTA;
-      System.out.println("HP left " + player.hp);
+      System.out.println("Player HP left " + player.hp);
+      try {
+        Thread.sleep(2000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
       break;
     default:
       break;
@@ -224,10 +309,14 @@ public class App {
     int option = 0;
     while (option != 1 && option != 2) {
       // cScreenDelay(100);
+      System.out.println();
       System.out.println("Wellcome to DeepDark ");
+      System.out.println();
+      System.out.println("---------------------------");
       System.out.println("Control Option : ");
       System.out.println("1. Start");
       System.out.println("2. Exit");
+      System.out.println("---------------------------");
       option = userOption();
     }
     if (option == 1) {
@@ -238,12 +327,22 @@ public class App {
 
   static void applyDamage(Enemy enemy, int px) {
     if (px == 0) {
-      if (player.mp <= 0) {
-        System.out.println("No more mp...");
-      } else {
-        System.out.println("Cooling Down ..");
+      try {
+        Thread.sleep(2000);
+      } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
       }
-
+      System.out.println("Cooling Down ..");
+    } else if (px == -1) {
+      try {
+        Thread.sleep(2000);
+      } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+      System.out.println("No more mp...");
+      System.out.println("Use A can increase your MP..");
     } else {
       int eAd = enemy.adA();
       int eAp = enemy.apA();
@@ -257,6 +356,12 @@ public class App {
         System.out.println("Enemy produce " + enemyTA + " Damage");
       }
       player.hp -= enemyTA;
+      System.out.println("Player HP left " + player.hp);
+      try {
+        Thread.sleep(2000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
     }
   }
 
@@ -328,6 +433,7 @@ public class App {
   }
 
   static void printBanner() {
+    System.out.println();
     System.out.println("    _/          _/  _/_/_/_/  _/        _/          _/_/_/    _/_/    _/      _/  _/_/_/_/");
     System.out.println("    _/          _/  _/        _/        _/        _/        _/    _/  _/_/  _/_/  _/      ");
     System.out.println("   _/    _/    _/  _/_/_/    _/        _/        _/        _/    _/  _/  _/  _/  _/_/_/   ");
@@ -347,7 +453,7 @@ public class App {
     System.out.println("    _/    _/  _/_/_/    _/_/_/    _/_/_/        _/    _/  _/_/_/_/  _/_/_/    _/_/        ");
     System.out.println("   _/    _/  _/        _/        _/            _/    _/  _/    _/  _/    _/  _/  _/       ");
     System.out.println(" _/_/_/    _/_/_/_/  _/_/_/_/  _/            _/_/_/    _/    _/  _/    _/  _/    _/       ");
-
+    System.out.println();
   }
 
   static void printStageClear() {
@@ -400,6 +506,7 @@ public class App {
 
   public static void main(String[] args) throws Exception {
     init();
+    itemInit();
     printBanner();
     mainControlPanel();
   }
